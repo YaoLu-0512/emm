@@ -64,7 +64,7 @@ class EventMagRecurrentDataset(data.Dataset):
         test_video_list = os.listdir(os.path.join(self.dataroot, 'test'))
 
         video_list = train_video_list if self.split=='train' else test_video_list
-
+        
         self.setLength = self.n + 2
         self.imageStepSeqsPath = []
         self.imageSeqsPath = [] 
@@ -205,7 +205,7 @@ class EventMagRecurrentDataset(data.Dataset):
         # print('blur0_path:{}'.format(blur0_path))
 
         
-        seq = blur0_path.split(f'{self.split}/')[1].split('/')[0]
+        seq = Path(blur0_path).parent.parent.name
 
         origin_index = os.path.basename(blur0_path).split('.')[0]
         alpha = int(seq.split('_')[1])

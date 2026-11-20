@@ -9,7 +9,7 @@ datasets:
   val:
     name: gopro-twoblur-test
     type: TestEventMagRecurrentDataset
-    dataroot: /mnt/workspace/chenyutian/project/EMM/datasets/tuning_fork
+    dataroot: C:/Users/luyao/Desktop/Capstone/emm/dataset_maybe
     # dataroot: ./datasets/UND_11_1
 
     # interpolation settings
@@ -54,7 +54,7 @@ network_g:
 path:
   pretrain_network_g: /mnt/workspace/chenyutian/project/EMM/checkpoint/net_g_200000.pth
   resume_state: ~ 
-  root: /mnt/data/sail_3090/chenyutian/project/EMM  # set this option ONLY in TEST!!!
+  root: C:/Users/luyao/Desktop/Capstone/emm/dataset_maybe  # set this option ONLY in TEST!!!
 
 # validation settings
 val:

@@ -1,0 +1,380 @@
+2026-11-20 16:55:57,355 INFO: 
+                ____                _       _____  ____
+               / __ ) ____ _ _____ (_)_____/ ___/ / __ \
+              / __  |/ __ `// ___// // ___/\__ \ / /_/ /
+             / /_/ // /_/ /(__  )/ // /__ ___/ // _, _/
+            /_____/ \__,_//____//_/ \___//____//_/ |_|
+     ______                   __   __                 __      __
+    / ____/____   ____   ____/ /  / /   __  __ _____ / /__   / /
+   / / __ / __ \ / __ \ / __  /  / /   / / / // ___// //_/  / /
+  / /_/ // /_/ // /_/ // /_/ /  / /___/ /_/ // /__ / /<    /_/
+  \____/ \____/ \____/ \____/  /_____/\____/ \___//_/|_|  (_)
+    
+Version Information: 
+	BasicSR: 1.2.0+c404666
+	PyTorch: 2.11.0+cu128
+	TorchVision: 0.26.0+cu128
+2026-11-20 16:55:57,356 INFO: 
+  name: motion_mag_test
+  model_type: EventBasedMotionMagModel
+  scale: 1
+  num_gpu: 1
+  manual_seed: 10
+  datasets:[
+    train:[
+      type: EventMagRecurrentDataset
+      dataroot: C:\Users\luyao\Desktop\Capstone\emm\dataset_maybe
+      num_end_interpolation: 1
+      num_inter_interpolation: 29
+      norm_voxel: True
+      one_voxel_flag: True
+      return_deblur_voxel: False
+      filename_tmpl: {}
+      io_backend:[
+        type: disk
+      ]
+      gt_size: 256
+      use_hflip: True
+      use_rot: True
+      random_reverse: False
+      use_shuffle: True
+      num_worker_per_gpu: 6
+      batch_size_per_gpu: 1
+      dataset_enlarge_ratio: 8
+      prefetch_mode: cpu
+      num_prefetch_queue: 2
+      phase: train
+      scale: 1
+    ]
+    val:[
+      type: EventMagRecurrentDataset
+      dataroot: C:\Users\luyao\Desktop\Capstone\emm\dataset_maybe
+      num_end_interpolation: 1
+      num_inter_interpolation: 29
+      norm_voxel: True
+      one_voxel_flag: True
+      return_deblur_voxel: False
+      io_backend:[
+        type: disk
+      ]
+      gt_size: None
+      use_hflip: False
+      use_rot: False
+      phase: val
+      scale: 1
+    ]
+  ]
+  dataset_name: UND
+  network_g:[
+    type: EvsMotionMagNet
+    img_chn: 3
+    ev_chn: 2
+    num_encoders: 2
+    base_num_channels: 32
+    num_block: 1
+    num_residual_blocks: 2
+  ]
+  path:[
+    strict_load_g: True
+    resume_state: None
+    training_states: c:\users\luyao\desktop\capstone\emm\experiments\motion_mag_test\training_states
+    root: c:\users\luyao\desktop\capstone\emm
+    experiments_root: c:\users\luyao\desktop\capstone\emm\experiments\motion_mag_test
+    models: c:\users\luyao\desktop\capstone\emm\experiments\motion_mag_test\models
+    log: c:\users\luyao\desktop\capstone\emm\experiments\motion_mag_test
+    visualization: c:\users\luyao\desktop\capstone\emm\experiments\motion_mag_test\visualization
+  ]
+  train:[
+    optim_g:[
+      type: AdamW
+      lr: 0.0001
+      weight_decay: 0.0001
+      betas: [0.9, 0.99]
+    ]
+    scheduler:[
+      type: TrueCosineAnnealingLR
+      T_max: 10000
+      eta_min: 1e-07
+    ]
+    total_iter: 200000
+    warmup_iter: -1
+    pixel_opt:[
+      type: CharbonnierLoss
+      loss_weight: 1
+      reduction: mean
+    ]
+    regular_opt:[
+      type: CharbonnierLoss
+      loss_weight: 0.01
+      reduction: mean
+    ]
+  ]
+  val:[
+    val_freq: 6000.0
+    save_img: True
+    save_gt: False
+    grids: None
+    crop_size: None
+    max_minibatch: 8
+    metrics_interpo:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 0
+        test_y_channel: False
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 0
+        test_y_channel: False
+      ]
+    ]
+  ]
+  logger:[
+    print_freq: 200
+    save_checkpoint_freq: 2000.0
+    use_tb_logger: True
+  ]
+  dist_params:[
+    backend: nccl
+    port: 29500
+  ]
+  is_train: True
+  dist: False
+  rank: 0
+  world_size: 1
+
+2026-11-20 16:55:57,366 INFO: Temporal augmentation: random reverse is False.
+2026-11-20 16:55:57,366 INFO: Dataset EventMagRecurrentDatasetis created.
+2026-11-20 16:55:57,366 INFO: Use cpu prefetch dataloader: num_prefetch_queue = 2
+2026-11-20 16:55:57,367 INFO: Training statistics:
+	Number of train images: 10
+	Dataset enlarge ratio: 8
+	Batch size per gpu: 1
+	World size (gpu number): 1
+	Require iter number per epoch: 80
+	Total epochs: 2500; iters: 200000.
+2026-11-20 16:55:57,370 INFO: Temporal augmentation: random reverse is False.
+2026-11-20 16:55:57,370 INFO: Dataset EventMagRecurrentDatasetis created.
+2026-11-20 16:55:57,370 INFO: Number of val images/folders in testset: 4
+2026-11-20 16:55:57,752 INFO: Network: EvsMotionMagNet, with parameters: 5,349,891
+2026-11-20 16:55:57,753 INFO: EvsMotionMagNet(
+  (head): ConvLayer(
+    (conv2d): Conv2d(2, 32, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (relu): LeakyReLU(negative_slope=0.2)
+  )
+  (encoders_forward): ModuleList(
+    (0): BiLinkRecurrentThenDownAttenfusionmodifiedConvLayer(
+      (conv): ConvLayer(
+        (conv2d): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (relu): LeakyReLU(negative_slope=0.2)
+      )
+      (relu): LeakyReLU(negative_slope=0.2)
+      (recurrent_block): BiLinkRecurrentConv(
+        (forward_trunk): ConvResidualBlocks(
+          (main): Sequential(
+            (0): Conv2d(192, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Sequential(
+              (0): ResidualBlockNoBN(
+                (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+                (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+                (relu): ReLU(inplace=True)
+              )
+            )
+          )
+        )
+        (lrelu): LeakyReLU(negative_slope=0.2, inplace=True)
+      )
+      (fuse_two_dir): ConvLayer(
+        (conv2d): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+        (relu): LeakyReLU(negative_slope=0.2)
+      )
+      (down): Conv2d(64, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    )
+    (1): BiLinkRecurrentThenDownAttenfusionmodifiedConvLayer(
+      (conv): ConvLayer(
+        (conv2d): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (relu): LeakyReLU(negative_slope=0.2)
+      )
+      (relu): LeakyReLU(negative_slope=0.2)
+      (atten_fuse): CrossmodalAtten_imgeventalladd(
+        (conv1): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=64)
+        (conv1_e): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        (conv2_e): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=64)
+        (conv3): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+        (se_1): Sequential(
+          (0): AdaptiveAvgPool2d(output_size=1)
+          (1): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+          (2): ReLU(inplace=True)
+          (3): Conv2d(32, 64, kernel_size=(1, 1), stride=(1, 1))
+          (4): Sigmoid()
+        )
+        (se_2): Sequential(
+          (0): AdaptiveAvgPool2d(output_size=1)
+          (1): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+          (2): ReLU(inplace=True)
+          (3): Conv2d(32, 64, kernel_size=(1, 1), stride=(1, 1))
+          (4): Sigmoid()
+        )
+        (gelu): GELU(approximate='none')
+        (conv4): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+        (conv_y_side): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm1_e): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (recurrent_block): BiLinkRecurrentConv(
+        (forward_trunk): ConvResidualBlocks(
+          (main): Sequential(
+            (0): Conv2d(384, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (1): LeakyReLU(negative_slope=0.1, inplace=True)
+            (2): Sequential(
+              (0): ResidualBlockNoBN(
+                (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+                (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+                (relu): ReLU(inplace=True)
+              )
+            )
+          )
+        )
+        (lrelu): LeakyReLU(negative_slope=0.2, inplace=True)
+      )
+      (fuse_two_dir): ConvLayer(
+        (conv2d): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+        (relu): LeakyReLU(negative_slope=0.2)
+      )
+      (down): Conv2d(128, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    )
+  )
+  (head_img): ConvLayer(
+    (conv2d): Conv2d(3, 16, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (relu): LeakyReLU(negative_slope=0.2)
+  )
+  (img_encoders): ModuleList(
+    (0): ImageEncoderConvBlock(
+      (identity): Conv2d(16, 32, kernel_size=(1, 1), stride=(1, 1))
+      (conv_1): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_1): LeakyReLU(negative_slope=0.2)
+      (conv_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_2): LeakyReLU(negative_slope=0.2)
+      (conv_3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_3): LeakyReLU(negative_slope=0.2)
+      (down): Conv2d(32, 32, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    )
+    (1): ImageEncoderConvBlock(
+      (identity): Conv2d(32, 64, kernel_size=(1, 1), stride=(1, 1))
+      (conv_1): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_1): LeakyReLU(negative_slope=0.2)
+      (conv_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_2): LeakyReLU(negative_slope=0.2)
+      (conv_3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_3): LeakyReLU(negative_slope=0.2)
+      (down): Conv2d(64, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
+    )
+  )
+  (img_decoders_M): ModuleList(
+    (0): ImageDecoderConvBlock(
+      (identity): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+      (conv_1): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_1): LeakyReLU(negative_slope=0.2)
+      (conv_2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_2): LeakyReLU(negative_slope=0.2)
+      (conv_3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_3): LeakyReLU(negative_slope=0.2)
+    )
+    (1): ImageDecoderConvBlock(
+      (identity): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (conv_1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_1): LeakyReLU(negative_slope=0.2)
+      (conv_2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_2): LeakyReLU(negative_slope=0.2)
+      (conv_3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_3): LeakyReLU(negative_slope=0.2)
+    )
+  )
+  (img_decoders_V): ModuleList(
+    (0): ImageDecoderConvBlock(
+      (identity): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+      (conv_1): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_1): LeakyReLU(negative_slope=0.2)
+      (conv_2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_2): LeakyReLU(negative_slope=0.2)
+      (conv_3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_3): LeakyReLU(negative_slope=0.2)
+    )
+    (1): ImageDecoderConvBlock(
+      (identity): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (conv_1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_1): LeakyReLU(negative_slope=0.2)
+      (conv_2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_2): LeakyReLU(negative_slope=0.2)
+      (conv_3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_3): LeakyReLU(negative_slope=0.2)
+    )
+  )
+  (evs_decoders_dM): ModuleList(
+    (0-1): 2 x ImageDecoderConvBlock(
+      (identity): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (conv_1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_1): LeakyReLU(negative_slope=0.2)
+      (conv_2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_2): LeakyReLU(negative_slope=0.2)
+      (conv_3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu_3): LeakyReLU(negative_slope=0.2)
+    )
+  )
+  (merge_imgMV): ConvLayer(
+    (conv2d): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (relu): LeakyReLU(negative_slope=0.2)
+  )
+  (resblocks): ModuleList(
+    (0-1): 2 x ResidualBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+  (decoders): ModuleList(
+    (0): TransposeRecurrentConvLayer(
+      (transposed_conv2d): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
+      (forward_trunk): ConvResidualBlocks(
+        (main): Sequential(
+          (0): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Sequential(
+            (0): ResidualBlockNoBN(
+              (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (relu): ReLU(inplace=True)
+            )
+          )
+        )
+      )
+    )
+    (1): TransposeRecurrentConvLayer(
+      (transposed_conv2d): ConvTranspose2d(64, 32, kernel_size=(2, 2), stride=(2, 2))
+      (forward_trunk): ConvResidualBlocks(
+        (main): Sequential(
+          (0): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): LeakyReLU(negative_slope=0.1, inplace=True)
+          (2): Sequential(
+            (0): ResidualBlockNoBN(
+              (conv1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (conv2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+              (relu): ReLU(inplace=True)
+            )
+          )
+        )
+      )
+    )
+  )
+  (pred): ConvLayer(
+    (conv2d): Conv2d(32, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+)
+2026-11-20 16:55:57,754 INFO: Model [EventBasedMotionMagModel] is created.
+2026-11-20 16:55:58,233 INFO: Start training from epoch: 0, iter: 0

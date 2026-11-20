@@ -36,10 +36,10 @@ def events_to_voxel_grid(events, num_bins, width, height, return_format='CHW'):
     for i,event in enumerate(events):
     
         # events[:, 0] = (num_bins - 1) * (events[:, 0] - first_stamp) / deltaT # 
-        tis = np.ones(event[:, 0].shape).astype(np.int)*i
-        xs = event[:, 1].astype(np.int)
-        ys = event[:, 2].astype(np.int)
-        pols = event[:, 3].astype(np.int)
+        tis = np.ones(event[:, 0].shape).astype(int)*i
+        xs = event[:, 1].astype(int)
+        ys = event[:, 2].astype(int)
+        pols = event[:, 3].astype(int)
         pols[pols == 0] = -1  # polarity should be +1 / -1
 
         pols_pos = pols.copy()
@@ -48,7 +48,7 @@ def events_to_voxel_grid(events, num_bins, width, height, return_format='CHW'):
         pols_neg = pols.copy()
         pols_neg[pols_neg == 1] = 0
 
-        # tis = ts.astype(np.int)
+        # tis = ts.astype(int)
         # dts = ts - tis
         # vals_left = pols * (1.0 - dts)
         # vals_right = pols * dts

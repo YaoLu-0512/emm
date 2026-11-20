@@ -8,12 +8,12 @@ manual_seed: 10
 datasets:
   train:
     type: EventMagRecurrentDataset
-    dataroot: /mnt/workspace/chenyutian/project/EMM/datasets/trainset_tiny
+    dataroot: C:\Users\luyao\Desktop\Capstone\emm\dataset_maybe
 
     # interpolation settings
     num_end_interpolation: 1 
     num_inter_interpolation: 29
-    # voxel settings
+    # voxel settingspython basicsr/train.py -opt options/train.yml
     norm_voxel: true
     one_voxel_flag: true
     return_deblur_voxel: false
@@ -39,7 +39,7 @@ datasets:
     # name: gopro-twoblur-test
     type: EventMagRecurrentDataset
 
-    dataroot: /mnt/workspace/chenyutian/project/EMM/datasets/trainset_tiny
+    dataroot: C:\Users\luyao\Desktop\Capstone\emm\dataset_maybe
 
     # interpolation settings
     num_end_interpolation: 1 # m
@@ -79,7 +79,7 @@ path:
   strict_load_g: true
   resume_state: ~ 
   training_states: ~ # save current trainig model states, for resume
-  root: /mnt/data/sail_3090/chenyutian/project/REFID  # set this option ONLY in TEST!!!
+  #root: /mnt/data/sail_3090/chenyutian/project/REFID  # set this option ONLY in TEST!!!
 
 # training settings
 train:
